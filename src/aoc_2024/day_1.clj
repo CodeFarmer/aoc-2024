@@ -15,9 +15,7 @@
            aseq)))
 
 (defn sorted-diffs [[aseq bseq]]
-  (->> (map - (sort aseq) (sort bseq))
-       (map abs)
-       (reduce +)))
+  (map abs (map - (sort aseq) (sort bseq))))
 
 (defn similarity-scores [[aseq bseq]]
   (let [freqs (frequencies bseq)]

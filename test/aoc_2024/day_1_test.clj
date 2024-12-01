@@ -24,13 +24,13 @@
          (lines-to-lists sample-data))))
 
 (deftest sorted-diffs-test
-  (is (= 11 (sorted-diffs (lines-to-lists sample-data)))))
+  (is (= [2 1 0 1 2 5] (sorted-diffs (lines-to-lists sample-data)))))
 
 (def input-data
   (lines-as-vector "aoc-2024-inputs/input-1.txt"))
 
 (deftest part-1-test
-  (is (= 3714264 (sorted-diffs (lines-to-lists input-data)))))
+  (is (= 3714264 (reduce + (sorted-diffs (lines-to-lists input-data))))))
 
 ;; part 2
 
