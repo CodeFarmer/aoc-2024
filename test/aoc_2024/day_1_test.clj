@@ -34,11 +34,6 @@
 
 ;; part 2
 
-(deftest count-occurrences-test
-  (let [[_ bseq] (lines-to-lists sample-data)]
-    (is (= 3 (count-occurrences bseq 3)))))
-
-
 (deftest similarity-scores-test
   (is (= [9 4 0 0 9 9] (similarity-scores (lines-to-lists sample-data)))))
 

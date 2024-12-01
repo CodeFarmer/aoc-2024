@@ -15,15 +15,12 @@
            aseq)))
 
 (defn sorted-diffs [[aseq bseq]]
-
   (->> (map - (sort aseq) (sort bseq))
        (map abs)
        (reduce +)))
 
-(defn count-occurrences [aseq x]
-  (count (filter #(= x %) aseq)))
-
 (defn similarity-scores [[aseq bseq]]
-  (map #(* % (count-occurrences bseq %)) aseq))
+  (let [freqs (frequencies bseq)]
+    (map #(* % (get freqs % 0)) aseq)))
 
 
