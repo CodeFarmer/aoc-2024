@@ -71,3 +71,6 @@
   (is (= 0 (ctoi \0)))
   (is (= 1 (ctoi \1)))
   (is (= 9 (ctoi \9))))
+
+(deftest string-to-ints-test
+  (is (= [4 3] (string-to-ints "4   3"))))

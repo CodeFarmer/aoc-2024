@@ -1,4 +1,5 @@
-(ns aoc-2024.core)
+(ns aoc-2024.core
+  (:require [clojure.string :as str]))
 
 ;; AOC utility functions, carried over from the 2023 version
 
@@ -10,6 +11,11 @@
   "Transform a sequence of strings into a sequence of integers"
   [aseq]
   (map #(Integer/parseInt %) aseq))
+
+
+(defn string-to-ints [astr]
+  (intify-seq (str/split astr #"\s+")))
+
 
 ;; turn a map inside out (v -> k)
 (defn minverse [amap]

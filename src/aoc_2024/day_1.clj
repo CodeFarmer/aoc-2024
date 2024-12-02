@@ -2,10 +2,6 @@
   (:require [aoc-2024.core :refer :all]
             [clojure.string :as str]))
 
-
-(defn string-to-ints [astr]
-  (intify-seq (str/split astr #"\s+")))
-
 (defn lines-to-lists
   ([aseq]
    (reduce (fn [[avec bvec] astr]
