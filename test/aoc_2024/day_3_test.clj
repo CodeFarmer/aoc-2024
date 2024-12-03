@@ -12,10 +12,21 @@
   (is (= [[2 4] [5 5] [11 8] [8 5]] (get-multiplies sample-data))))
 
 (deftest summing-test
-  (is (= 161 (reduce + (map #(apply * %) (get-multiplies sample-data))))))
+  (is (= 161 (sum-multiplies (get-multiplies sample-data)))))
 
 (def input-data
   (slurp "aoc-2024-inputs/input-3.txt"))
 
 (deftest part-1-test
-  (is (= 164730528 (reduce + (map #(apply * %) (get-multiplies input-data))))))
+  (is (= 164730528 (sum-multiplies (get-multiplies input-data)))))
+
+;; part 2
+
+(def new-sample-data "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))")
+
+
+(deftest on-sections-test
+  (is (= [] (on-sections "")))
+  (is (= ["footwerpy"] (on-sections "footwerpy")))
+  (is (= ["footwerpy"] (on-sections "footwerpydon't()graap")))
+  (is (= ["xmul(2,4)&mul[3,7]!^" "do()?mul(8,5))"] (on-sections new-sample-data))))
