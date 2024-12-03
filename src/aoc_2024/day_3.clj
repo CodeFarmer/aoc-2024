@@ -22,5 +22,7 @@
      (if-let [i (str/index-of astr "don't()")]
        (let [remainder (subs astr (+ i 7))
              j (str/index-of remainder "do()")]
-         (recur (conj acc (subs astr 0 i)) (subs remainder 0 j)))
+         (recur (conj acc (subs astr 0 i))
+                (if j (subs remainder j)
+                    "")))
        (conj acc astr)))))

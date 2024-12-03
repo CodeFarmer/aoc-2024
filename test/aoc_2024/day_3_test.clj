@@ -24,9 +24,11 @@
 
 (def new-sample-data "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))")
 
-
 (deftest on-sections-test
   (is (= [] (on-sections "")))
   (is (= ["footwerpy"] (on-sections "footwerpy")))
   (is (= ["footwerpy"] (on-sections "footwerpydon't()graap")))
   (is (= ["xmul(2,4)&mul[3,7]!^" "do()?mul(8,5))"] (on-sections new-sample-data))))
+
+(deftest part-2-test
+  (is (= 70478672 (sum-multiplies (apply concat (map get-multiplies (on-sections input-data)))))))
