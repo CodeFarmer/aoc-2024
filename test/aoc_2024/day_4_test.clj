@@ -5,14 +5,18 @@
             [clojure.string :as str]))
 
 (def sample-data
-  "..X...
+  (into []
+        (str/split
+         "..X...
 .SAMX.
 .A..A.
 XMAS.S
-.X....")
+.X...." #"\n")))
 
 (def bigger-sample
-  "MMMSXXMASM
+  (into []
+        (str/split
+         "MMMSXXMASM
 MSAMXMSMSA
 AMXSXMAAMM
 MSAMASMSMX
@@ -21,10 +25,13 @@ XXAMMXXAMA
 SMSMSASXSS
 SAXAMASAAA
 MAMMMXMMMM
-MXMXAXMASX")
+MXMXAXMASX"
+         #"\n")))
 
 (def bigger-sample-revealed
-  "....XXMAS.
+  (into []
+        (str/split
+         "....XXMAS.
 .SAMXMS...
 ...S..A...
 ..A.A.MS.X
@@ -33,7 +40,34 @@ X.....XA.A
 S.S.S.S.SS
 .A.A.A.A.A
 ..M.M.M.MM
-.X.X.XMASX")
+.X.X.XMASX"
+         #"\n")))
+
+(deftest word-test
+  (is (word? "XMAS" sample-data [2 0] [1 1])
+      "XMAS should occur in the map starting at (2, 0) down and to the right")
+  (is (not (word? "XMAS" sample-data [2 0] [1 0]))
+      "XMAS should not occur in the map starting at (2, 0) to the right")
+  (is (not (word? "XMAS" sample-data [2 0] [0 -1]))
+      "XMAS should not occur in the map starting at (2, 0) going up, and it should also not cause an error"))
+
+(deftest find-locations-test
+  (is (= [[2 0] [4 1] [0 3] [1 4]]
+         (find-locations sample-data \X))))
 
 (deftest count-words-test
-  (is (= 18 (count-occurrences "XMAS" bigger-sample))))
+  (is (= 18 (count (find-occurrences "XMAS" bigger-sample)))))
+
+(def input-data
+  (lines-as-vector "aoc-2024-inputs/input-4.txt"))
+
+(deftest part-1-test
+  (is (= 2378 (count (find-occurrences "XMAS" input-data)))))
+
+;; part 2
+
+(deftest count-x-mas-test
+  (is (= 9 (count (find-x-mases bigger-sample)))))
+
+(deftest part-2-test
+  (is (= 0 (count (find-x-mases input-data)))))
