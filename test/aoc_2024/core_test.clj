@@ -1,5 +1,6 @@
 (ns aoc-2024.core-test
   (:require [clojure.test :refer :all]
+            [clojure.string :as str]
             [aoc-2024.core :refer :all]))
 
 (deftest minverse-test
@@ -46,6 +47,18 @@
 (deftest neighbour-finding-test
   (is (= [[1 0] [0 1]]
          (tmap-find-neighbours [0 0] simple-city))))
+
+(deftest find-locations-test
+  (let [sample-data
+        (into []
+              (str/split
+               "..X...
+.SAMX.
+.A..A.
+XMAS.S
+.X...." #"\n"))]
+    (is (= [[2 0] [4 1] [0 3] [1 4]]
+           (tmap-find-locations sample-data \X)))))
 
 (deftest cycle-finding-test
   (is (= nil  (find-cycle [1 2 3 4 5]))

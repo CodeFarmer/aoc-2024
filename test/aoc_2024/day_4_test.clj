@@ -51,10 +51,6 @@ S.S.S.S.SS
   (is (not (word? "XMAS" sample-data [2 0] [0 -1]))
       "XMAS should not occur in the map starting at (2, 0) going up, and it should also not cause an error"))
 
-(deftest find-locations-test
-  (is (= [[2 0] [4 1] [0 3] [1 4]]
-         (find-locations sample-data \X))))
-
 (deftest count-words-test
   (is (= 18 (count (find-occurrences "XMAS" bigger-sample)))))
 

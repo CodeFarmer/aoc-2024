@@ -8,12 +8,6 @@
     (and (= (first astr) (get-tile tmap [x y]))
          (recur (rest astr) tmap [(+ x dx) (+ y dy)] [dx dy]))))
 
-(defn find-locations [tmap achar]
-  (for [y (range 0 (tmap-height tmap))
-        x (range 0 (tmap-width tmap))
-        :when (= achar (get-tile tmap [x y]))]
-    [x y]))
-
 (def all-directions
   (for [dx [-1 0 1]
         dy [-1 0 1]
@@ -22,7 +16,7 @@
 
 (defn find-occurrences [astr tmap]
   "find all pairs of (start, direction) that identify the places astr occurs in the grid"
-  (for [start (find-locations tmap (first astr))
+  (for [start (tmap-find-locations tmap (first astr))
         dir all-directions
         :when (word? astr tmap start dir)]
     [start dir]))
@@ -34,4 +28,4 @@
                      (word? "MAS" tmap [(inc x) (inc y)] [-1 -1]))
                  (or (word? "MAS" tmap [(dec x) (inc y)] [ 1 -1])
                      (word? "MAS" tmap [(inc x) (dec y)] [-1  1]))))
-          (find-locations tmap \A)))
+          (tmap-find-locations tmap \A)))

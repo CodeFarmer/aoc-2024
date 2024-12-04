@@ -63,6 +63,12 @@
   [tile-map [x y]]
   (get-in tile-map [y x]))
 
+(defn tmap-find-locations [tmap achar]
+  (for [y (range 0 (tmap-height tmap))
+        x (range 0 (tmap-width tmap))
+        :when (= achar (get-tile tmap [x y]))]
+    [x y]))
+
 (def directions
   {:right [ 1  0]
    :left  [-1  0]
