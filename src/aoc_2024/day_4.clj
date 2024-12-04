@@ -4,11 +4,9 @@
 
 
 (defn word? [astr tmap [x y] [dx dy]]
-  (comment   (println "word?" astr [x y] [dx dy])
-             (println "tile:" (get-tile tmap [x y])))
   (if (empty? astr) true
     (and (= (first astr) (get-tile tmap [x y]))
-         (word? (rest astr) tmap [(+ x dx) (+ y dy)] [dx dy]))))
+         (recur (rest astr) tmap [(+ x dx) (+ y dy)] [dx dy]))))
 
 (defn find-locations [tmap achar]
   (for [y (range 0 (tmap-height tmap))

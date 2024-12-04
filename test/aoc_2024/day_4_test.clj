@@ -70,4 +70,4 @@ S.S.S.S.SS
   (is (= 9 (count (find-x-mases bigger-sample)))))
 
 (deftest part-2-test
-  (is (= 0 (count (find-x-mases input-data)))))
+  (is (= 1796 (count (find-x-mases input-data)))))
