@@ -29,5 +29,18 @@
 (defn find-middle [alist]
   (nth alist (quot (count alist) 2)))
 
-;; part 1
+;; part 2
+
+(defn insert-sorted-by [idx sorted x]
+  (let [partfn #(before-ok? idx % x)]
+    (concat (take-while partfn sorted) [x] (drop-while partfn sorted))))
+
+(defn sort-by-index
+  "Build a sorted version of aseq according to the ordering rules in idx, by insertion"
+  ([idx aseq]
+   (sort-by-index idx [] aseq))
+  ([idx sorted-section aseq]
+   (if (empty? aseq)
+     sorted-section
+     (recur idx (insert-sorted-by idx sorted-section (first aseq)) (rest aseq)))))
 

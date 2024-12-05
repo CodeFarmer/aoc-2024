@@ -71,3 +71,37 @@
         updates (get-updates input-data)]
     (is (= 5391
            (reduce + (map find-middle (filter #(ordered-update? idx %) updates)))))))
+
+;; part 2
+
+(deftest insertion-test
+  (let [idx (build-index (get-data-pairs sample-data))]
+    (is (= [97 75] (insert-sorted-by idx [75] 97)))
+    (is (= [97 75 47] (insert-sorted-by idx [97 75] 47)))))
+
+(deftest sorting-test
+  (let [idx (build-index (get-data-pairs sample-data))]
+    (is (= [] (sort-by-index idx [])))
+    (is (= [97] (sort-by-index idx [97])))
+    (is (= [97 75 47 61 53]
+           (sort-by-index idx [75 97 47 61 53])))))
+
+(deftest sample-sorting-test
+  (let [idx (build-index (get-data-pairs sample-data))
+        updates (get-updates sample-data)]
+    (is (= 123
+           (->> updates
+                (filter #(not (ordered-update? idx %)))
+                (map #(sort-by-index idx %))
+                (map find-middle)
+                (reduce +))))))
+
+(deftest part-1-test
+  (let [idx (build-index (get-data-pairs input-data))
+        updates (get-updates input-data)]
+    (is (= 6142
+           (->> updates
+                (filter #(not (ordered-update? idx %)))
+                (map #(sort-by-index idx %))
+                (map find-middle)
+                (reduce +))))))
