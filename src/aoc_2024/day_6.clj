@@ -59,3 +59,12 @@
   [tmap start dir]
   (let [route-squares (into #{} (map first (guard-route tmap start dir)))]
     (filter #(guard-route-loop? #{} (aoc/tmap-update tmap % \O) start dir) route-squares)))
+
+(defn p-guard-route-counting-obstacles
+  [tmap start dir]
+  (let [route-squares (into #{} (map first (guard-route tmap start dir)))]
+    (filter true? (pmap #(guard-route-loop? #{} (aoc/tmap-update tmap % \O) start dir) route-squares))))
+
+
+
+
