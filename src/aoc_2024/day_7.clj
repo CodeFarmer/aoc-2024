@@ -4,7 +4,7 @@
 
 (defn parse-line [astr]
   (let [[h t] (str/split astr #": ")]
-    [(bigint h) (aoc/intify-seq (str/split t #"\s+"))]))
+    [(parse-long h) (map parse-long (str/split t #"\s+"))]))
 
 (defn has-possibility?
   ([r operators aseq]
@@ -25,4 +25,4 @@
                         (map parse-line strings))))))
 
 (defn numcat [a b]
-  (bigint (str a b)))
+  (parse-long (str a b)))

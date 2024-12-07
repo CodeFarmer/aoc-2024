@@ -36,7 +36,7 @@
              #"\n"))
 
 (deftest part-1-test
-  (is (= 3598800864292N (calibration-total input-data))))
+  (is (= 3598800864292 (calibration-total input-data))))
 
 ;; part 2
 
@@ -46,5 +46,5 @@
 (is (= 11387
        (calibration-total [* + numcat] sample-data)))
 
-(is (= 340362529351427N
+(is (= 340362529351427
        (calibration-total [* + numcat] input-data)))
