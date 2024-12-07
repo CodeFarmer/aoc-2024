@@ -43,3 +43,20 @@
                                 (map first 
                                      (filter (fn [[t s]] (> (count-possibilities t s) 0))
                                              (map parse-line input-data)))))))
+
+;; part 2
+
+(deftest numcat-test
+  (is (= 12345 (numcat 12 345))))
+
+(is (= 11387
+       (reduce +
+               (map first 
+                    (filter (fn [[t s]] (> (count-possibilities t [* + numcat ]s) 0))
+                            (map parse-line sample-data))))))
+
+(is (= 340362529351427N
+       (reduce +
+               (map first 
+                    (filter (fn [[t s]] (> (count-possibilities t [* + numcat ]s) 0))
+                            (map parse-line input-data))))))

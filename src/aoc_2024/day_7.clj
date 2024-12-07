@@ -11,9 +11,14 @@
 ;; operators to give the result r
 (defn count-possibilities
   ([r aseq]
-   (count-possibilities r (first aseq) (rest aseq)))
-  ([r t aseq]
-   (if (empty? aseq)
-     (if (= t r) 1 0)
-     (let [branches (map #(% t (first aseq)) [* +])]
-       (reduce + (map #(count-possibilities r % (rest aseq)) branches))))))
+   (count-possibilities r [* +] aseq))
+  ([r operators aseq]
+   (count-possibilities r (first aseq) operators (rest aseq)))
+  ([r t operators aseq]
+   (cond (empty? aseq) (if (= t r) 1 0)
+         (> t r) 0
+         :default (let [branches (map #(% t (first aseq)) operators)]
+                    (reduce + (map #(count-possibilities r % operators (rest aseq)) branches))))))
+
+(defn numcat [a b]
+  (bigint (str a b)))
