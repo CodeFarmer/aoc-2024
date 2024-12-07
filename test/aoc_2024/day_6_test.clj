@@ -46,7 +46,8 @@
       "Placing an obstacle in the lower right quadrant should induce a loop"))
 
 (deftest obstacle-placing-test
-  (let [obstacles (guard-route-counting-obstacles sample-data [4 6] :up)]
+  (let [obstacles (guard-route-counting-obstacles-i sample-data [4 6] :up)]
+
     (comment 
       (println "obstacles:" obstacles)
       (doseq [m (map #(aoc/tmap-update sample-data % \O) obstacles)]
@@ -55,4 +56,6 @@
     (is (= 6 (count obstacles)))))
 
 (deftest part-2-test
-  (is (= 1911 (count (p-guard-route-counting-obstacles input-data (first (aoc/tmap-find-locations input-data \^)) :up)))))
+  (is (= 1911 (count (guard-route-counting-obstacles-p input-data (first (aoc/tmap-find-locations input-data \^)) :up)))))
+
+

@@ -34,7 +34,7 @@
 
 (defn guard-route
   ([tmap start dir]
-   (guard-route #{} tmap start dir))
+   (guard-route [] tmap start dir))
   ([acc tmap start dir]
    (let [walk (guard-walk tmap start dir)
          stop (first (last walk))]
@@ -57,14 +57,37 @@
 
 (defn guard-route-counting-obstacles
   [tmap start dir]
-  (let [route-squares (into #{} (map first (guard-route tmap start dir)))]
+  (let [route-squares (guard-route-squares tmap start dir)]
     (filter #(guard-route-loop? #{} (aoc/tmap-update tmap % \O) start dir) route-squares)))
 
-(defn p-guard-route-counting-obstacles
+(defn guard-route-counting-obstacles-p
   [tmap start dir]
   (let [route-squares (into #{} (map first (guard-route tmap start dir)))]
     (filter true? (pmap #(guard-route-loop? #{} (aoc/tmap-update tmap % \O) start dir) route-squares))))
 
+;; experimental TODO: figure out why this much faster way wrongly
+;; returns ~130 extra obstacles
 
+(defn guard-route-counting-obstacles-i
+  [tmap start dir]
+  (loop [acc #{}
+         seen #{}
+         route (guard-route tmap start dir)
+         loc start
+         dir dir]
+    (if (empty? route)
+      acc
+      (let [[l d] (first route)]
+        (if (guard-route-loop? (conj seen [loc dir]) (aoc/tmap-update tmap l \O) loc dir)
+          (recur (conj acc l)
+                 (conj seen [loc dir])
+                 (rest route)
+                 l
+                 d)
+          (recur acc
+                 (conj seen [loc dir])
+                 (rest route)
+                 l
+                 d))))))
 
 
