@@ -20,5 +20,14 @@
          :default (let [branches (map #(% t (first aseq)) operators)]
                     (reduce + (map #(count-possibilities r % operators (rest aseq)) branches))))))
 
+(defn calibration-total
+  ([strings]
+   (calibration-total [* +] strings))
+  ([operators strings]
+   (reduce +
+           (map first 
+                (filter (fn [[t s]] (> (count-possibilities t operators s) 0))
+                        (map parse-line strings))))))
+
 (defn numcat [a b]
   (bigint (str a b)))

@@ -29,20 +29,14 @@
   (is (= 1 (count-possibilities 292 [11 6 16 20]))))
 
 (deftest count-calibration-results-test
-  (is (= 3749 (reduce +
-                      (map first 
-                           (filter (fn [[t s]] (> (count-possibilities t s) 0))
-                                   (map parse-line sample-data)))))))
+  (is (= 3749 (calibration-total sample-data))))
 
 (def input-data
   (str/split (slurp "aoc-2024-inputs/input-7.txt")
              #"\n"))
 
 (deftest part-1-test
-  (is (= 3598800864292N (reduce +
-                                (map first 
-                                     (filter (fn [[t s]] (> (count-possibilities t s) 0))
-                                             (map parse-line input-data)))))))
+  (is (= 3598800864292N (calibration-total input-data))))
 
 ;; part 2
 
@@ -50,13 +44,7 @@
   (is (= 12345 (numcat 12 345))))
 
 (is (= 11387
-       (reduce +
-               (map first 
-                    (filter (fn [[t s]] (> (count-possibilities t [* + numcat ]s) 0))
-                            (map parse-line sample-data))))))
+       (calibration-total [* + numcat] sample-data)))
 
 (is (= 340362529351427N
-       (reduce +
-               (map first 
-                    (filter (fn [[t s]] (> (count-possibilities t [* + numcat ]s) 0))
-                            (map parse-line input-data))))))
+       (calibration-total [* + numcat] input-data)))
