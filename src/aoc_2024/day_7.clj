@@ -6,19 +6,14 @@
   (let [[h t] (str/split astr #": ")]
     [(bigint h) (aoc/intify-seq (str/split t #"\s+"))]))
 
-
-;; Count the possible ways the numbers in aseq can be joined by
-;; operators to give the result r
-(defn count-possibilities
-  ([r aseq]
-   (count-possibilities r [* +] aseq))
+(defn has-possibility?
   ([r operators aseq]
-   (count-possibilities r (first aseq) operators (rest aseq)))
+   (has-possibility? r (first aseq) operators (rest aseq)))
   ([r t operators aseq]
-   (cond (empty? aseq) (if (= t r) 1 0)
-         (> t r) 0
+   (cond (empty? aseq) (= t r)
+         (> t r) false
          :default (let [branches (map #(% t (first aseq)) operators)]
-                    (reduce + (map #(count-possibilities r % operators (rest aseq)) branches))))))
+                    (some #(has-possibility? r % operators (rest aseq)) branches)))))
 
 (defn calibration-total
   ([strings]
@@ -26,7 +21,7 @@
   ([operators strings]
    (reduce +
            (map first 
-                (filter (fn [[t s]] (> (count-possibilities t operators s) 0))
+                (filter (fn [[t s]] (has-possibility? t operators s))
                         (map parse-line strings))))))
 
 (defn numcat [a b]

@@ -20,13 +20,13 @@
 (deftest parsing-test
   (is (= [190 [10 19]] (parse-line (first sample-data)))))
 
-(deftest possibilities-test
-  (is (= 0 (count-possibilities 190 [])))
-  (is (= 0 (count-possibilities 190 [20])))
-  (is (= 1 (count-possibilities 190 [190])))
-  (is (= 1 (count-possibilities 190 [190 0])))
-  (is (= 2 (count-possibilities 3267 [81 40 27])))
-  (is (= 1 (count-possibilities 292 [11 6 16 20]))))
+(deftest has-possibility-test
+  (is (not (has-possibility? 190 [* +] [])))
+  (is (not (has-possibility? 190 [* +] [20])))
+  (is (has-possibility? 190 [* +] [190]))
+  (is (has-possibility? 190 [* +] [190 0]))
+  (is (has-possibility? 3267 [* +] [81 40 27]))
+  (is (has-possibility? 292 [* +] [11 6 16 20])))
 
 (deftest count-calibration-results-test
   (is (= 3749 (calibration-total sample-data))))
