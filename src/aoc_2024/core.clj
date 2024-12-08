@@ -91,6 +91,14 @@
 ;; follow it
 ;; (for example, the output of core.iterate)
 
+(defn on-map? [tmap [x y]]
+  (let [width (tmap-width tmap)
+        height (tmap-height tmap)]
+    (and (not (>= x width))
+         (not (< x 0))
+         (not (>= y height))
+         (not (< y 0)))))
+
 (defn find-cycle
   "In a deterministic stateless sequence (for example the output of core.iterate), find the first index of the beginning of a cycle, and return the cycle contents"
   ([aseq]

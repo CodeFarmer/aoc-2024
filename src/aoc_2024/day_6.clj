@@ -2,15 +2,6 @@
   (:require [aoc-2024.core :as aoc]
             [clojure.string :as str]))
 
-
-(defn on-map? [tmap [x y]]
-  (let [width (aoc/tmap-width tmap)
-        height (aoc/tmap-height tmap)]
-    (and (not (>= x width))
-         (not (< x 0))
-         (not (>= y height))
-         (not (< y 0)))))
-
 (defn blocked? [tmap loc]
   (#{\# \O} (aoc/get-tile tmap loc)))
 
@@ -38,7 +29,7 @@
   ([acc tmap start dir]
    (let [walk (guard-walk tmap start dir)
          stop (first (last walk))]
-     (if (not (on-map? tmap stop))
+     (if (not (aoc/on-map? tmap stop))
        (into acc (butlast walk))
        (recur (into acc walk) tmap stop (next-turn dir))))))
 
@@ -51,7 +42,7 @@
          stop (first (last walk))]
      ;; TODO deal better with the fact that a walk can be zero
      (cond (nil? stop) (recur seen tmap start (next-turn dir))
-           (not (on-map? tmap stop)) false
+           (not (aoc/on-map? tmap stop)) false
            (some seen walk) true
            :default (recur (into seen walk) tmap stop (next-turn dir))))))
 
