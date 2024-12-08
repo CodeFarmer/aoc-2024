@@ -94,7 +94,6 @@
            (apply (partial find-resonant-antinodes example) antennae)))))
 
 (deftest part-1-test
-  (is (= 0 (count (reduce into #{} (vals (collect-resonant-antennae input-data)))))))
+  (is (= 861 (count (reduce into #{} (vals (collect-antennae input-data (partial find-resonant-antinodes input-data))))))))
 
-;; note, is "unless that antenna is the only one of its frequency"
-;; significant?
+
