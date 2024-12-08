@@ -71,5 +71,30 @@
              #"\n"))
 
 (deftest part-1-test
-  (is (= 0 (count (reduce into #{} (vals (collect-antennae input-data)))))))
+  (is (= 247 (count (reduce into #{} (vals (collect-antennae input-data)))))))
 
+;; part 2
+
+(deftest resonant-antinode-finding-test
+  (let [example (str/split "T.........
+...T......
+......#...
+.........#
+..........
+..........
+..........
+..........
+..........
+.........."
+                           #"\n")
+        antennae (aoc/tmap-find-locations example \T)
+        antinodes (aoc/tmap-find-locations example \#)]
+
+    (is (= (into #{} (concat antinodes antennae))
+           (apply (partial find-resonant-antinodes example) antennae)))))
+
+(deftest part-1-test
+  (is (= 0 (count (reduce into #{} (vals (collect-resonant-antennae input-data)))))))
+
+;; note, is "unless that antenna is the only one of its frequency"
+;; significant?
