@@ -84,13 +84,6 @@
 (defn print-tmap [tmap]
   (doseq [r tmap] (println r)))
 
-;; finding cycles in sequences
-
-;; assumptions: the sequence is deterministic in that once the first
-;; member of a cycle appears, the rest of the cycle is certain to
-;; follow it
-;; (for example, the output of core.iterate)
-
 (defn on-map? [tmap [x y]]
   (let [width (tmap-width tmap)
         height (tmap-height tmap)]
@@ -98,6 +91,13 @@
          (not (< x 0))
          (not (>= y height))
          (not (< y 0)))))
+
+;; finding cycles in sequences
+
+;; assumptions: the sequence is deterministic in that once the first
+;; member of a cycle appears, the rest of the cycle is certain to
+;; follow it
+;; (for example, the output of core.iterate)
 
 (defn find-cycle
   "In a deterministic stateless sequence (for example the output of core.iterate), find the first index of the beginning of a cycle, and return the cycle contents"
