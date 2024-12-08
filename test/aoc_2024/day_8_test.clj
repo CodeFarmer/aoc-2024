@@ -93,7 +93,7 @@
     (is (= (into #{} (concat antinodes antennae))
            (apply (partial find-resonant-antinodes example) antennae)))))
 
-(deftest part-1-test
+(deftest part-2-test
   (is (= 861 (count (reduce into #{} (vals (collect-antennae input-data (partial find-resonant-antinodes input-data))))))))
 
 
