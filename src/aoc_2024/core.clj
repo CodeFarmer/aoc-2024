@@ -127,3 +127,6 @@
 
 (defn ctoi [achar]
   (- (int achar) 48))
+
+(defn seq-positions [fn aseq]
+  (filter #(fn (nth aseq %)) (range 0 (count aseq))))
