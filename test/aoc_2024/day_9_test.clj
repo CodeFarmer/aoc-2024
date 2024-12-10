@@ -75,10 +75,9 @@
 (def input-data
   (str/trim (slurp "aoc-2024-inputs/input-9.txt")))
 
-(comment 
-  (deftest part-1-test
-    (let [fs (parse-fs input-data)]
-      (is (= 0 (checksum (compact-totally fs)))))))
+(deftest part-1-test
+  (let [fs (parse-fs input-data)]
+    (is (= 6258319840548 (checksum (compact-totally fs))))))
 
 ;; part 2
 
@@ -89,4 +88,4 @@
 
 (deftest part-2-test
   (let [fs (parse-fs input-data)]
-      (is (= 0 (checksum (compact-nofrag fs))))))
+      (is (= 6286182965311 (checksum (compact-nofrag fs))))))
