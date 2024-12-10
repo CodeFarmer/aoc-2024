@@ -51,6 +51,11 @@
 
 ;; THIS IS SUPER DUMB. Actually doing it in steps was dumb
 
+;; FOLLOWUP: This is some of the worst code I have ever written in any
+;; language it's awful CLojure, and CLojure makes the solution more
+;; awful Maybe I can rethink this one on the plane to Australa, since
+;; I have an answer
+
 (defn compact-step [fs]
   (let [compacted (take-while #(not (:empty %)) fs)
         uncompacted (drop-while #(not (:empty %)) fs)
