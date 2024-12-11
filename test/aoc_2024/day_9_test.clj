@@ -89,3 +89,7 @@
 (deftest part-2-test
   (let [fs (parse-fs input-data)]
       (is (= 6286182965311 (checksum (compact-nofrag fs))))))
+
+;; parts 1 and 2 together take about 1:30 on my i5 desktop, and 3:30
+;; on my old Thinkpad. This is very much not OK and I'll come back to
+;; it.
