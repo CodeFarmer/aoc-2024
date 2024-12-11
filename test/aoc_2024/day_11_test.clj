@@ -7,11 +7,11 @@
 (def sample-data [0 1 10 99 999])
 
 (deftest rules-test
-  (is (= 1 (blink 0)))
-  (is (= 2024 (blink 1)))
+  (is (= [1] (blink 0)))
+  (is (= [2024] (blink 1)))
   (is (= [1 0] (blink 10)))
   (is (= [9 9] (blink 99)))
-  (is (= 2021976 (blink 999))))
+  (is (= [2021976] (blink 999))))
 
 (deftest blink-stones-test
   (is (= [1 2024 1 0 9 9 2021976] (blink-stones sample-data))))
@@ -25,4 +25,12 @@
 (def input-data [1 24596 0 740994 60 803 8918 9405859])
 
 (deftest part-1-test
-  (is (= 0 (count-after-blinks input-data 25))))
+  (is (= 203457 (count-after-blinks input-data 25))))
+
+;; part 2
+
+(deftest iterated-blink-count-test
+  (is (= 55312 (iterated-blink-count-seq 25 [125 17]))))
+
+(deftest part-2-test
+  (is (= 241394363462435N (iterated-blink-count-seq 75 input-data))))
