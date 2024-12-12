@@ -22,7 +22,11 @@
   (is (= 55312 (count-after-blinks [125 17] 25))))
 
 
-(def input-data [1 24596 0 740994 60 803 8918 9405859])
+(def input-data
+  (map parse-long
+       (str/split
+        (slurp "aoc-2024-inputs/input-11.txt")
+        #"\s+")))
 
 (deftest part-1-test
   (is (= 203457 (count-after-blinks input-data 25))))
