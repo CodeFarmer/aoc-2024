@@ -64,13 +64,11 @@ MMMISSJEEE"
     (is (= 11 (count regions)))))
 
 (deftest perimeter-test
-  (let [regions (find-regions sample-data)]
-    (is (= 10 (count-perimeter regions #{[0 0] [1 0] [3 0] [2 0]})))))
+  (is (= 10 (count-perimeter #{[0 0] [1 0] [3 0] [2 0]}))))
 
 
 (deftest price-test
-  (let [regions (find-regions sample-data)]
-    (is (= 40 (price regions #{[0 0] [1 0] [3 0] [2 0]})))))
+  (is (= 40 (price #{[0 0] [1 0] [3 0] [2 0]}))))
 
 (deftest total-price-test
   (let [regions (find-regions sample-data)]
@@ -89,3 +87,40 @@ MMMISSJEEE"
   (let [regions (find-regions input-data)]
     (comment (output-regions input-data))
     (is (= 1361494 (total-price (find-regions input-data))))))
+
+;; part 2
+
+(deftest border-finding-test
+  (let [pairs (find-border-pairs (region-containing sample-data [2 1]))]
+    (is (= 10 (count pairs)))
+    (is (= #{[[2 2] [1 2]]
+             [[2 1] [1 1]]
+             [[3 3] [3 4]]
+             [[2 1] [3 1]]
+             [[3 2] [4 2]]
+             [[2 1] [2 0]]
+             [[2 2] [2 3]]
+             [[3 2] [3 1]]
+             [[3 3] [2 3]]
+             [[3 3] [4 3]]}
+           pairs))))
+
+(deftest side-finding-test
+  (let [pairs (find-border-pairs (region-containing sample-data [2 1]))]
+    (is (= #{[[2 2] [1 2]]
+             [[2 1] [1 1]]}
+           (get-side [[2 2] [1 2]] pairs))))
+  
+  (let [pairs (find-border-pairs (region-containing sample-data [0 3]))]
+    (is (= #{[[0 3] [0 4]] [[1 3] [1 4]] [[2 3] [2 4]]}
+           (get-side [[0 3] [0 4]] pairs)))))
+
+(deftest side-counting-test
+  (is (= 4 (count-sides (region-containing sample-data [0 0]))))
+  (is (= 8 (count-sides (region-containing sample-data [2 1])))))
+
+(deftest total-sided-price-test
+  (is (= 80 (total-sided-price (find-regions sample-data)))))
+
+(deftest part-2-test
+  (is (= 830516 (total-sided-price (find-regions input-data)))))
