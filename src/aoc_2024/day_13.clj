@@ -24,7 +24,7 @@
 
 (mi/set-current-implementation :vectorz)
 
-(def EPSILON 0.000001)
+(def EPSILON 0.0001)
 
 ;; return nil if afloat is not within EPSILON of the nearest integer,
 ;; otherwise return the nearest integer
@@ -36,7 +36,9 @@
 
 (defn integer-solution [avec]
   (let [v (mapv ftoi avec)]
-    (if (every? #(not (nil? %)) v)
+    (if (every? #(and 
+                  (not (nil? %))
+                  (not (> 0 %))) v)
       v
       nil)))
 
@@ -44,9 +46,12 @@
                      [bx by] target]]
   (let [X [[ax bx]
            [ay by]]
-        sol (integer-solution (ml/solve X target))]
-    (if sol
-      (let [[a b] sol]
+        sol (ml/solve X target)
+        sol' (integer-solution sol)]
+    (if sol'
+      (let [[a b] sol']
+        (assert (= [(+ (* a ax) (* b bx))
+                    (+ (* a ay) (* b by))] target))
         (+ (* 3 a) b))
       0)))
 

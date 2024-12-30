@@ -48,5 +48,17 @@ Prize: X=18641, Y=10279
 (def input-machines
   (map parse-machine input-data))
 
-(def part-1-test
-  (is (= 0 (reduce + (map minimum-cost input-machines)))))
+(deftest part-1-test
+  (is (= 31761 (reduce + (map minimum-cost input-machines)))))
+
+;; part 2
+
+(defn correct-xy
+  [[a b [x y]]] [a b [(+ 10000000000000 x)
+                      (+ 10000000000000 y)]])
+
+(def part-2-machines (map correct-xy
+                          input-machines))
+
+(deftest part-2-test
+  (is (= 90798500745591 (reduce + (map minimum-cost part-2-machines)))))
