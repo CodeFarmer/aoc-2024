@@ -5,5 +5,6 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/math.combinatorics "0.3.0"]
-                 [net.mikera/core.matrix "0.63.0"]]
+                 [net.mikera/core.matrix "0.63.0"]
+                 [net.mikera/vectorz-clj "0.48.0"]]
   :repl-options {:init-ns aoc-2024.core})
