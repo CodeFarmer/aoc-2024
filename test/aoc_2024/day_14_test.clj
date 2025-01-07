@@ -50,3 +50,14 @@ p=9,5 v=-3,-3"
 
 (deftest part-1-test
   (is (= 220971520 (safety-factor 101 103 100 input-robots))))
+
+;; part 2
+
+(comment
+  (deftest part-2-test
+    (is (= 6355 (find-christmas-tree-manually 101 103 0 5648 input-robots)))))
+
+;; it turns out that a christmas tree is actually just a picture with a vertical line of ten robots in it
+(deftest part-2-test
+  (is (= 6355 (find-christmas-tree-boringly 101 103 0 input-robots))))
+

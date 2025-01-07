@@ -59,7 +59,7 @@
      (recur (map rest avec) (conj acc (apply str (map first avec)))))))
 
 (defn get-tile
-  "Given a map expressed as a vector of strings, find the tile character ar [x y]"
+  "Given a map expressed as a vector of strings, find the tile character at [x y]"
   [tile-map [x y]]
   (get-in tile-map [y x]))
 
@@ -91,6 +91,9 @@
          (not (< x 0))
          (not (>= y height))
          (not (< y 0)))))
+
+(defn empty-tmap [width height]
+  (into [] (repeat height (apply str (repeat width \.)))))
 
 ;; finding cycles in sequences
 
