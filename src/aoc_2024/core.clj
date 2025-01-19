@@ -95,6 +95,9 @@
 (defn empty-tmap [width height]
   (into [] (repeat height (apply str (repeat width \.)))))
 
+(defn tmap [astr]
+  (str/split astr #"\n"))
+
 ;; finding cycles in sequences
 
 ;; assumptions: the sequence is deterministic in that once the first
