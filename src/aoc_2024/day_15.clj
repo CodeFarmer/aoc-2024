@@ -11,33 +11,6 @@
 
 (def legal-directions (into #{} (keys directions)))
 
-(defn move-thing [tmap pos achar]
-  (if (not (legal-directions achar)) tmap
-      (let [delta (directions achar)
-            pos' (mapv + pos delta)
-            tile (aoc/get-tile tmap pos')]
-        (cond (= \. tile)
-              (-> tmap
-                  (aoc/tmap-update pos  \.)
-                  (aoc/tmap-update pos' (aoc/get-tile tmap pos)))
-              (#{\O \@} tile)
-              (let [tmap' (move-thing tmap pos' achar)]
-                (if (= tmap' tmap)
-                  tmap
-                  (move-thing tmap' pos achar)))
-              :default tmap))))
-
-(defn move-robot [tmap achar]
-  ;; TODO maybe consider maintaining robot state separately
-  (let [pos (first (aoc/tmap-find-locations tmap \@))]
-    (move-thing tmap pos achar)))
-
-(defn move-robot-string [tmap astr]
-  ;; (println "move-robot-string:" astr)
-  ;; (aoc/print-tmap tmap)
-  (if (empty? astr) tmap
-      (recur (move-robot tmap (first astr)) (rest astr))))
-
 (defn gps [tmap]
   (reduce +
           (map (fn [[x y]] (+ x (* 100 y)))
@@ -74,23 +47,23 @@
                 (if (or (= tmap'' tmap') (= tmap' tmap))
                   tmap
                   (move-thing-or-things tmap'' pos achar)))
-              (#{\@ \[ \]} tile)
+              (#{\@ \[ \] \O} tile)
               (let [tmap' (move-thing-or-things tmap pos' achar)]
                 (if (= tmap' tmap)
                   tmap
                   (move-thing-or-things tmap' pos achar)))
               :default tmap))))
 
-(defn move-robot-things [tmap achar]
+(defn move-robot [tmap achar]
   ;; TODO maybe consider maintaining robot state separately
   (let [pos (first (aoc/tmap-find-locations tmap \@))]
     (move-thing-or-things tmap pos achar)))
 
-(defn move-robot-things-string [tmap astr]
+(defn move-robot-string [tmap astr]
   ;; (println "move-robot-string:" astr)
   ;; (aoc/print-tmap tmap)
   (if (empty? astr) tmap
-      (recur (move-robot-things tmap (first astr)) (rest astr))))
+      (recur (move-robot tmap (first astr)) (rest astr))))
 
 (defn doubled-gps [tmap]
   ;; DRY up

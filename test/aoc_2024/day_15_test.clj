@@ -50,9 +50,9 @@
     (is (= state-2
            (move-robot example-map \^)) "Moving into an empty square should move the robot")
     (is (= state-2
-           (move-thing example-map [2 2] \^)) "Moving from the robot's square into an empty square should move the robot")
+           (move-thing-or-things example-map [2 2] \^)) "Moving from the robot's square into an empty square should move the robot")
     (is (= state-2a
-           (move-thing state-2 [3 1] \>)) "Moving from a barrel square into an empty square should move the barrel")
+           (move-thing-or-things state-2 [3 1] \>)) "Moving from a barrel square into an empty square should move the barrel")
 
     ;; OK now for the pushing
     (is (= state-3
@@ -148,7 +148,7 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^")
 ##....[]....##
 ##..........##
 ##############")
-         (move-robot-things
+         (move-robot
           (aoc/tmap "##############
 ##......##..##
 ##..........##
@@ -163,7 +163,7 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^")
 ##.....@....##
 ##..........##
 ##############")
-         (move-robot-things
+         (move-robot
           (aoc/tmap "##############
 ##......##..##
 ##..........##
@@ -179,7 +179,7 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^")
 ##.....@....##
 ##..........##
 ##############")
-         (move-robot-things
+         (move-robot
           (aoc/tmap "##############
 ##......##..##
 ##...[][]...##
@@ -200,12 +200,12 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^")
 ##..@......[].[][]##
 ##......[][]..[]..##
 ####################")
-         (move-robot-things-string doubled-sample bigger-moves))))
+         (move-robot-string doubled-sample bigger-moves))))
 
 (deftest doubled-gps-test
-  (is (= 9021 (doubled-gps (move-robot-things-string doubled-sample bigger-moves)))))
+  (is (= 9021 (doubled-gps (move-robot-string doubled-sample bigger-moves)))))
 
 (deftest part-2-test
   (let [start (double-wide input-map)
-        finish (move-robot-things-string start input-moves)]
+        finish (move-robot-string start input-moves)]
     (is (= 1381446 (doubled-gps finish)))))
