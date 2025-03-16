@@ -117,5 +117,95 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^")
 (def input-map (aoc/tmap (first raw-input)))
 (def input-moves (second raw-input))
 
+;; TODO experiment with different data structures, this seems like
+;; tile maps are not the thing efficiency wise. Time to try smaps?
 (deftest part-1-test
   (is (= 1360570 (gps (move-robot-string input-map input-moves)))))
+
+;; part 2
+
+(def doubled-sample
+  (aoc/tmap
+   "####################
+##....[]....[]..[]##
+##............[]..##
+##..[][]....[]..[]##
+##....[]@.....[]..##
+##[]##....[]......##
+##[]....[]....[]..##
+##..[][]..[]..[][]##
+##........[]......##
+####################"))
+
+(deftest double-test
+  (is (= doubled-sample (double-wide bigger-sample))))
+
+(deftest move-things-test
+  (is (= (aoc/tmap "##############
+##......##..##
+##..........##
+##...[][]@..##
+##....[]....##
+##..........##
+##############")
+         (move-robot-things
+          (aoc/tmap "##############
+##......##..##
+##..........##
+##....[][]@.##
+##....[]....##
+##..........##
+##############") \<)))
+  (is (= (aoc/tmap "##############
+##......##..##
+##...[][]...##
+##....[]....##
+##.....@....##
+##..........##
+##############")
+         (move-robot-things
+          (aoc/tmap "##############
+##......##..##
+##..........##
+##...[][]...##
+##....[]....##
+##.....@....##
+##############") \^))
+      "Vertical moves should push adjacent blocks")
+  (is (= (aoc/tmap "##############
+##......##..##
+##...[][]...##
+##....[]....##
+##.....@....##
+##..........##
+##############")
+         (move-robot-things
+          (aoc/tmap "##############
+##......##..##
+##...[][]...##
+##....[]....##
+##.....@....##
+##..........##
+##############") \^))
+      "Vertical moves with joined blocks should be blocked if any are blocked"))
+
+(deftest bigger-move-string-test
+  (is (= (aoc/tmap "####################
+##[].......[].[][]##
+##[]...........[].##
+##[]........[][][]##
+##[]......[]....[]##
+##..##......[]....##
+##..[]............##
+##..@......[].[][]##
+##......[][]..[]..##
+####################")
+         (move-robot-things-string doubled-sample bigger-moves))))
+
+(deftest doubled-gps-test
+  (is (= 9021 (doubled-gps (move-robot-things-string doubled-sample bigger-moves)))))
+
+(deftest part-2-test
+  (let [start (double-wide input-map)
+        finish (move-robot-things-string start input-moves)]
+    (is (= 1381446 (doubled-gps finish)))))
