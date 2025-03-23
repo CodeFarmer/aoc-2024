@@ -98,6 +98,54 @@
 (defn tmap [astr]
   (str/split astr #"\n"))
 
+;; functions dealing with 2D maps expressed as maps of [x, y] to character
+
+(defn tmap-to-pmap [tmap]
+  (let [h (tmap-height tmap)
+        w (tmap-width tmap)]
+    {:map-type :pmap
+     :width w
+     :height h
+     :floor \.
+     :tiles (into {}
+                  (for [y (range 0 h)
+                        x (range 0 w)
+                        :when (not (= \. (get-tile tmap [x y])))]
+                    [[x y] (get-tile tmap [x y])]))}))
+
+(defn empty-pmap [width height]
+  {:map-type :pmap
+   :width width
+   :height height
+   :floor \.
+   :tiles {}})
+
+(defn pmap-get-tile [pmap [x y]]
+  (get (:tiles pmap) [x y] (:floor pmap)))
+
+;; NOTE this means you can put things outside width/height at the
+;; moment, update them?
+(defn pmap-update [pmap [x y] c]
+  (if (= (:floor pmap) c)
+    (assoc pmap :tiles (dissoc (:tiles pmap) [x y]))
+    (assoc-in pmap [:tiles [x y]] c)))
+
+;; FIXME does this work at all?
+(defn pmap-find-locations [pmap achar]
+  (map first 
+       (filter (fn [[k v]] (= v achar)) (:tiles pmap))))
+
+(defn pmap-to-tmap [pmap]
+  (reduce
+   (fn [tmap [x y]]
+     (tmap-update tmap [x y] (pmap-get-tile pmap [x y])))
+   (empty-tmap (:width pmap)
+               (:height pmap))
+   (keys (:tiles pmap))))
+
+(defn pmap [astr]
+  (tmap-to-pmap (tmap astr)))
+
 ;; finding cycles in sequences
 
 ;; assumptions: the sequence is deterministic in that once the first
