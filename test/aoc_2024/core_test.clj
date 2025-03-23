@@ -12,41 +12,45 @@
 
 (deftest map-rotate-test
   (testing "rotation clockwise"
-    (is (= [] (tmap-rotate-right [])))
-    (is (= ["1"] (tmap-rotate-right ["1"])))
-    (is (= ["1"
-            "2"] (tmap-rotate-right ["12"])))
-    (is (= ["21" (tmap-rotate-right ["1"
-                                     "2"])]))
-    
-    (is (= ["741"
-            "852"
-            "963"]
-           (tmap-rotate-right ["123"
-                               "456"
-                               "789"]))))
+    (testing "tile map"
+      (is (= [] (tmap-rotate-right [])))
+      (is (= ["1"] (tmap-rotate-right ["1"])))
+      (is (= ["1"
+              "2"] (tmap-rotate-right ["12"])))
+      (is (= ["21" (tmap-rotate-right ["1"
+                                       "2"])]))
+      
+      (is (= ["741"
+              "852"
+              "963"]
+             (tmap-rotate-right ["123"
+                                 "456"
+                                 "789"])))))
   (testing "rotation counterclockwise"
-    (is (= ["369"
-            "258"
-            "147"]
-           (tmap-rotate-left ["123"
-                              "456"
-                              "789"])))))
+    (testing "tile map"
+      (is (= ["369"
+              "258"
+              "147"]
+             (tmap-rotate-left ["123"
+                                "456"
+                                "789"]))))))
 
 (def simple-city
   ["1133"
    "3133"
    "3111"])
 
-(deftest tmap-update-test
-  (is (= ["1133"
-          "31K3"
-          "3111"]
-         (tmap-update simple-city [2 1] \K))))
+(deftest map-update-test
+  (testing "tile map"
+    (is (= ["1133"
+            "31K3"
+            "3111"]
+           (tmap-update simple-city [2 1] \K)))))
 
 (deftest neighbour-finding-test
-  (is (= [[1 0] [0 1]]
-         (tmap-find-neighbours [0 0] simple-city))))
+  (testing "tile map"
+    (is (= [[1 0] [0 1]]
+           (tmap-find-neighbours [0 0] simple-city)))))
 
 (deftest find-locations-test
   (let [sample-data
@@ -57,8 +61,14 @@
 .A..A.
 XMAS.S
 .X...." #"\n"))]
-    (is (= [[2 0] [4 1] [0 3] [1 4]]
-           (tmap-find-locations sample-data \X)))))
+    (testing "tile map"
+      (is (= [[2 0] [4 1] [0 3] [1 4]]
+             (tmap-find-locations sample-data \X))))))
+
+(deftest pmap-and-tmap-test
+  (is (= simple-city
+         (pmap-to-tmap 
+          (tmap-to-pmap simple-city)))))
 
 (deftest cycle-finding-test
   (is (= nil  (find-cycle [1 2 3 4 5]))
