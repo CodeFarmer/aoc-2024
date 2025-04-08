@@ -69,3 +69,7 @@
 
 (deftest part-1-test
   (is (= 65436 (best-path-score input-map))))
+
+(deftest path-counting-test
+  (is (= 45 (count-best-path-tiles example-map)))
+  (is (= 64 (count-best-path-tiles bigger-map))))

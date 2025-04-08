@@ -25,6 +25,18 @@
       turned
       (conj turned [(conj pos' dir) (inc cost)]))))
 
+(defn -walk [tmap finish q seen]
+  (if (empty? q) 0
+       (let [[state cost] (peek q)
+             loc (take 2 state)
+             useful? (fn [[s c]] (< c (get seen s Integer/MAX_VALUE)))]
+         (if (= finish loc)
+           cost
+           (recur tmap
+                  finish
+                  (into (pop q) (filter useful? (possible-moves tmap [state cost])))
+                  (assoc seen state cost))))))
+
 (defn best-path-score
   ([tmap]
    (best-path-score tmap
@@ -32,13 +44,7 @@
                     (conj (pq/priority-queue #(- (second %))) [(starting-state tmap) 0])
                     {}))
   ([tmap finish q seen]
-   (comment (println (aoc/tmap-width tmap) (aoc/tmap-height tmap) (count q) (count seen)))
-   (if (empty? q) 0
-       (let [[state cost] (peek q)
-             useful? (fn [[s c]] (< c (get seen s Integer/MAX_VALUE)))]
-         (if (= finish (take 2 state))
-           cost
-           (recur tmap
-                  finish
-                  (into (pop q) (filter useful? (possible-moves tmap [state cost])))
-                  (assoc seen state cost)))))))
+   (-walk tmap finish q seen)))
+
+(defn count-best-path-tiles [tmap]
+  0)
