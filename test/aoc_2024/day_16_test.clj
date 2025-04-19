@@ -66,18 +66,15 @@
 
 (def input-map
   (aoc/tmap (slurp "aoc-2024-inputs/input-16.txt")))
-
-(comment 
-  (deftest part-1-test
-    (is (= 65436 (best-path-score input-map)))))
+ 
+(deftest part-1-test
+  (is (= 65436 (best-path-score input-map))))
 
 ;; part 2
 
-(comment 
-  (deftest bug-hunting-test
-    (let [buggy-map
-          (aoc/tmap "######
-######
+(deftest bug-hunting-test
+  (let [buggy-map
+        (aoc/tmap "######
 ###E.#
 #...##
 #.#.##
@@ -85,8 +82,12 @@
 #.####
 #S..##
 ######")]
-      (is (= 11 (count-best-path-tiles buggy-map))))))
+    (is (= 11 (count-best-path-tiles buggy-map)))))
 
 (deftest path-counting-test
   (is (= 45 (count-best-path-tiles example-map)))
   (is (= 64 (count-best-path-tiles bigger-map))))
+
+;; TODO run one walk for parts 1 and 2, this is ridiculous
+(deftest part-2-test
+  (is (= 489 (count-best-path-tiles input-map))))

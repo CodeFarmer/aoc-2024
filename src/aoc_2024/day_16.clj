@@ -17,6 +17,12 @@
    :right [:up :down]
    :down  [:right :left]})
 
+(def backtracks
+  {:left  :right
+   :right :left
+   :down  :up
+   :up    :down})
+
 (defn possible-moves [tmap [[x y dir] [pathable cost]]]
   (let [delta (aoc/directions dir)
         turned (mapv (fn [d] [[x y d] [pathable (+ cost 1000)]]) (turns dir))
@@ -25,29 +31,57 @@
       turned
       (conj turned [(conj pos' dir) [(conj pathable pos') (inc cost)]]))))
 
-(defn -walk [tmap finish q seen]
-  (if (empty? q) [#{} 0] ; technically this is a bug
-      (let [[state [pathable cost]] (peek q)
-            loc (take 2 state)
-            useful? (fn [[s [p c]]] (<= c (second (get seen s [#{} Integer/MAX_VALUE]))))
-            finished-states (filter #(= finish (take 2 %)) (keys seen))
-            finished-state (first finished-states)]
-        (if finished-state ;; wait do we even care?
-          (let [[finished-pathable finished-cost] (seen finished-state)]
-            (if (> cost finished-cost) ; we are done
-              [(reduce into #{}
-                       (->> (select-keys seen finished-states)
-                            (map second)
-                            (map first)))
-               finished-cost]
-              (recur tmap
-                       finish
-                       (pop q)
-                       (assoc seen state [(into (get-in seen [state 0] #{}) pathable) cost]))))
-          (recur tmap
-                 finish
-                 (into (pop q) (filter useful? (possible-moves tmap [state [pathable cost]])))
-                 (assoc seen state [(into (get-in seen [state 0] #{}) pathable) cost]))))))
+(defn -walk
+  ;; TODO why is it taking me 75000 iterations to see 4000 squares?
+  ([tmap finish q seen]
+   (-walk tmap finish q seen {} 0 (System/currentTimeMillis)))
+  
+  ([tmap finish q seen finished-states i start-time]
+
+   ;; DEBUG   
+   (if (zero? (mod i 1000))
+       (let [seen-squares (into #{} (map #(take 2 %) (keys seen)))
+             q-count (count q)]
+         (aoc/print-tmap (reduce (fn [a p] (aoc/tmap-update a p \O))
+                                 tmap
+                                 seen-squares))
+         (println "i:" i "q-count:" q-count "seen-squares:" (count seen-squares) "~cost:" (second (second (peek q))) "t:" (int (/ (- (System/currentTimeMillis) start-time) 1000)))))
+
+   (if (empty? q)
+     [#{} 0]               ; technically this is a bug
+     (let [[state [pathable cost]] (peek q)
+           loc (take 2 state)
+           finished-states' (if (= finish loc)
+                                  (assoc finished-states state [(into (get-in finished-states [state 0] #{}) pathable) cost])
+                                  finished-states)
+           useful? (fn [[s [p c]]]
+                     (<= c (second (get seen s [#{} Integer/MAX_VALUE]))))]
+       (if (not (empty? finished-states))
+         (let [finished-state (first (keys finished-states))
+               [finished-pathable finished-cost] (finished-states finished-state)
+               ]
+           (if (> cost finished-cost) ; we are done
+             [(reduce into #{}
+                      (->> finished-states'
+                           (map second)
+                           (map first)))
+              finished-cost]
+             (recur tmap
+                    finish
+                    (pop q)
+                    (assoc seen state [(into (get-in seen [state 0] #{}) pathable) cost])
+                    finished-states'
+                    (inc i)
+                    start-time)))
+         (recur tmap
+                finish
+                (into (pop q) (if (useful? [state [pathable cost]])
+                                (filter useful? (possible-moves tmap [state [pathable cost]]))
+                                []))
+                (assoc seen state [(into (get-in seen [state 0] #{}) pathable) cost])
+                finished-states'
+                (inc i)
+                start-time))))))
 
 (defn best-path-score
   ([tmap]
@@ -68,5 +102,6 @@
   ([tmap finish q seen]
    (let [[pathable cost] (-walk tmap finish q seen)]
 
-     ;; (aoc/print-tmap (reduce (fn [a pos] (aoc/tmap-update a pos \O)) tmap pathable))
+     (comment
+       (aoc/print-tmap (reduce (fn [a pos] (aoc/tmap-update a pos \O)) tmap pathable)))
      (inc (count pathable)))))
