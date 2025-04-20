@@ -38,37 +38,37 @@
   
   ([tmap finish q seen finished-states i start-time]
 
-   ;; DEBUG   
-   (if (zero? (mod i 1000))
+   ;; DEBUG
+   (comment 
+     (if (zero? (mod i 1000))
        (let [seen-squares (into #{} (map #(take 2 %) (keys seen)))
              q-count (count q)]
          (aoc/print-tmap (reduce (fn [a p] (aoc/tmap-update a p \O))
                                  tmap
                                  seen-squares))
-         (println "i:" i "q-count:" q-count "seen-squares:" (count seen-squares) "~cost:" (second (second (peek q))) "t:" (int (/ (- (System/currentTimeMillis) start-time) 1000)))))
+         (println "i:" i "q-count:" q-count "seen-squares:" (count seen-squares) "~cost:" (second (second (peek q))) "t:" (int (/ (- (System/currentTimeMillis) start-time) 1000))))))
 
    (if (empty? q)
-     [#{} 0]               ; technically this is a bug
+     [#{} 0] ;; probably this is a bug
      (let [[state [pathable cost]] (peek q)
            loc (take 2 state)
            finished-states' (if (= finish loc)
-                                  (assoc finished-states state [(into (get-in finished-states [state 0] #{}) pathable) cost])
-                                  finished-states)
+                              (assoc finished-states state [(into (get-in finished-states [state 0] #{}) pathable) cost])
+                              finished-states)
            useful? (fn [[s [p c]]]
                      (<= c (second (get seen s [#{} Integer/MAX_VALUE]))))]
        (if (not (empty? finished-states))
          (let [finished-state (first (keys finished-states))
-               [finished-pathable finished-cost] (finished-states finished-state)
-               ]
-           (if (> cost finished-cost) ; we are done
-             [(reduce into #{}
+               [finished-pathable finished-cost] (finished-states finished-state)]
+           (if (> cost finished-cost) ;; we are done
+             [(reduce into #{} ;; merge all the pathables from the finished states
                       (->> finished-states'
                            (map second)
                            (map first)))
               finished-cost]
              (recur tmap
                     finish
-                    (pop q)
+                    (pop q) ;; stop queueing new things, they can't possibly be shortest finishes
                     (assoc seen state [(into (get-in seen [state 0] #{}) pathable) cost])
                     finished-states'
                     (inc i)

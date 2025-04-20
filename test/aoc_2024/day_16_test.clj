@@ -2,7 +2,8 @@
   (:require [clojure.test :refer :all]
             [aoc-2024.day-16 :refer :all]
             [aoc-2024.core :as aoc]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [shams.priority-queue :as pq]))
 
 (def example-map
   (aoc/tmap "###############
@@ -66,9 +67,14 @@
 
 (def input-map
   (aoc/tmap (slurp "aoc-2024-inputs/input-16.txt")))
- 
+
+(def walked (-walk input-map
+                   (finish-square input-map)
+                   (conj (pq/priority-queue (fn [[_ [_ c]]] (- c))) [(starting-state input-map) [#{} 0]])
+                   {}))
+
 (deftest part-1-test
-  (is (= 65436 (best-path-score input-map))))
+  (is (= 65436 (second walked))))
 
 ;; part 2
 
@@ -88,6 +94,5 @@
   (is (= 45 (count-best-path-tiles example-map)))
   (is (= 64 (count-best-path-tiles bigger-map))))
 
-;; TODO run one walk for parts 1 and 2, this is ridiculous
 (deftest part-2-test
-  (is (= 489 (count-best-path-tiles input-map))))
+  (is (= 489 (inc (count (first walked))))))
