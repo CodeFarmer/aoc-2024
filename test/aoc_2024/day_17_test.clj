@@ -22,6 +22,8 @@
          (adv {:A 16 :B 3 :pc 0} 5))
       "adv divides A by two to the power of the combo operand when combined")
   (is (= {:A 3 :pc 4} (adv {:A 7 :pc 2} 1))
+      "adv divides A by two to the power of the combo operand truncated to an integer")
+  (is (= {:A 1 :pc 4} (adv {:A 9 :pc 2} 3))
       "adv divides A by two to the power of the combo operand truncated to an integer"))
 
 (deftest bxl-test
@@ -77,16 +79,52 @@
    :C 0
    :pc 0
    :output []
-   :program [2 4
-             1 5
-             7 5
-             1 6
-             0 3
-             4 0
-             5 5
-             3 0]})
-
+   :program [2 4 ;; bst A ; A mod 8   -> B (last 3 bits of A)
+             1 5 ;; bxl 1 ; B xor 1   -> B
+             7 5 ;; cdv B ; A div 2^B -> C (A << B)
+             1 6 ;; bxl 6 ; B xor 6   -> B
+             0 3 ;; adv 3 ; A div 8   -> A
+             4 0 ;; bxc _ ; B xor C   -> B
+             5 5 ;; out B ; B mod 8
+             3 0 ;; jnz 0
+             ]})
 
 (deftest part-1-test
   (is (= "7,3,1,3,6,3,6,0,2"
          (run-program input-data))))
+
+;; part 2
+
+(def quine-data
+  {:A 2024
+   :B 0
+   :C 0
+   :pc 0
+   :output []
+   :program [0 3 ;; adv 3
+             5 4 ;; out A
+             3 0 ;; jnz 0
+             ]})
+
+(deftest quine-test
+  (is (quine? (assoc quine-data :A 117440))))
+
+(deftest shortcut-quine-test
+  (is (shortcut-quine? (assoc quine-data :A 117440)))
+  (is (not (shortcut-quine? input-data))))
+
+(comment 
+  (deftest find-quinable-A-test
+    (is (= 0 (find-quinable-A input-data)))))
+
+;; we know that:
+
+;; divided by 8 16 times to reach zero:
+;; min 8^15 (35184372088832)
+;; max 8^16 (281474976710656)
+
+;; lower 3 bits of A -> B
+;; B <- (A mod 8)
+
+;; 3-bit numbers
+;; (xor (xor x 1) 6) = 7 - x

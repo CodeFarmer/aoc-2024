@@ -15,7 +15,7 @@
 
 (defn -dv [machine operand reg]
       (-> machine
-          (assoc reg (int (/ (machine :A) (m/pow 2 (combo machine operand)))))
+          (assoc reg (bit-shift-right (machine :A) (combo machine operand)))
           (increment-pc)))
 
 (defn adv [machine operand]
@@ -71,3 +71,43 @@
        ((opcodes (program pc))
         machine
         (program (inc pc)))))))
+
+;; part 2
+
+(defn quine? [machine]
+  (let [final-state (run-program machine)]
+    (= (:program final-state)
+       (:output final-state))))
+
+(defn shortcut-quine? [machine]
+  
+  (comment
+    (println machine))
+  
+  (let [pc (:pc machine)
+        program (:program machine)]
+
+    (if (>= pc (count program))
+      (= program (:output machine))
+      (let [op (opcodes (program pc))
+            machine' (op
+                      machine
+                      (program (inc pc)))
+            output' (:output machine')]
+        (if (and (= out op)
+                 (not (= output' (take (count output') program))))
+          false
+          (recur machine'))
+        ))))
+
+;; brute force, this is not going to work on its own.
+
+(defn find-quinable-A
+  ([machine]
+   (find-quinable-A machine 0))
+  ([machine a]
+   (if (zero? (mod a 1000000))
+     (println a ":" (run-program (assoc machine :A a))))
+   (if (shortcut-quine? (assoc machine :A a))
+     a
+     (recur machine (inc a)))))
